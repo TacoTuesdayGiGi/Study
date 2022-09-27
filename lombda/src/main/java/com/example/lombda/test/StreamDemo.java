@@ -1,14 +1,45 @@
-package com.example.lombda.entity;
+package com.example.lombda.test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.example.lombda.entity.Author;
+import com.example.lombda.entity.Book;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class StreamDemo {
     public static void main(String[] args) {
         List<Author> authors = getAuthors();
+//        test01(authors);
+//        test02();
+        test03();
+    }
+
+    private static void test03() {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("周星星", 1);
+        map.put("张月月", 2);
+        map.put("王阳阳", 3);
+        map.put("李天天", 4);
+        Set<Map.Entry<String, Integer>> entrySet = map.entrySet();
+        entrySet.stream()
+                .distinct()
+                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() > 3)
+                .forEach(stringIntegerEntry -> System.out.println(stringIntegerEntry.getKey() + ":" + stringIntegerEntry.getValue()));
+    }
+
+    private static void test02() {
+        Integer[] arr = {1, 2, 3, 4, 5};
+//        Stream<Integer> stream = Arrays.stream(arr);
+        Stream<Integer> stream = Stream.of(arr);
+        stream.filter(integer -> integer > 2)
+                .forEach(System.out::println);
+
+    }
+
+    private static void test01(List<Author> authors) {
         authors.stream()
                 .distinct()
                 .filter(author -> author.getAge() < 18)
