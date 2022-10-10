@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class StreamDemo {
@@ -14,7 +14,75 @@ public class StreamDemo {
         List<Author> authors = getAuthors();
 //        test01(authors);
 //        test02();
-        test03();
+//        test03();
+//        test04(authors);
+//        test05(authors);
+//        test06(authors);
+//        test07(authors);
+//        test08(authors);
+//        test09(authors);
+//        test10(authors);
+        test11(authors);
+    }
+
+    private static void test11(List<Author> authors) {
+        authors.stream()
+                .flatMap(author -> author.getBookList().stream())
+                .distinct()
+                .flatMap(book -> Arrays.stream(book.getCategory().split(",")))
+                .distinct()
+                .forEach(System.out::println);
+
+
+
+    }
+
+    private static void test10(List<Author> authors) {
+        authors.stream()
+                .flatMap(author -> author.getBookList().stream())
+                .distinct()
+                .forEach(book -> System.out.println(book.getName()));
+    }
+
+    private static void test09(List<Author> authors) {
+        authors.stream()
+                .distinct()
+                .sorted()
+                .skip(1)
+                .forEach(author -> System.out.println(author.getName()));
+    }
+
+    private static void test08(List<Author> authors) {
+        authors.stream()
+                .distinct()
+                .sorted()
+                .limit(2)
+                .forEach(author -> System.out.println(author.getName()));
+    }
+
+    private static void test07(List<Author> authors) {
+        authors.stream()
+                .distinct()
+                .sorted()
+                .forEach(author -> System.out.println(author.getAge()));
+    }
+
+    private static void test06(List<Author> authors) {
+        authors.stream()
+                .distinct()
+                .forEach(System.out::println);
+    }
+
+    private static void test05(List<Author> authors) {
+        authors.stream()
+                .map(Author::getAge)
+                .forEach(System.out::println);
+    }
+
+    private static void test04(List<Author> authors) {
+        authors.stream()
+                .filter(author -> author.getName().length() > 2)
+                .forEach(author -> System.out.println(author.getName()));
     }
 
     private static void test03() {
