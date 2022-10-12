@@ -2,11 +2,10 @@ package com.example.lombda.test;
 
 import com.example.lombda.entity.Author;
 import com.example.lombda.entity.Book;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamDemo {
@@ -22,7 +21,84 @@ public class StreamDemo {
 //        test08(authors);
 //        test09(authors);
 //        test10(authors);
-        test11(authors);
+//        test11(authors);
+//        test11(authors);
+//        test12(authors);
+//        test13(authors);
+//        test14(authors);
+//        test15(authors);
+//        test16(authors);
+        test17(authors);
+    }
+
+    private static void test17(List<Author> authors) {
+        Integer reduce = authors.stream()
+                .distinct()
+                .map(Author::getAge)
+                .reduce(0, Integer::sum);
+        Integer reduce1 = authors.stream()
+                .distinct()
+                .map(Author::getAge)
+                .reduce(Integer.MIN_VALUE, (integer, integer2) -> integer < integer2 ? integer : integer2);
+        Integer reduce2 = authors.stream()
+                .distinct()
+                .map(Author::getAge)
+                .reduce(Integer.MAX_VALUE, (integer, integer2) -> integer > integer2 ? integer : integer2);
+        Optional<Integer> reduce3 = authors.stream()
+                .distinct()
+                .map(Author::getAge)
+                .reduce((integer, integer2) -> integer < integer2 ? integer : integer2);
+        System.out.println(reduce);
+        System.out.println(reduce1);
+        System.out.println(reduce2);
+        System.out.println(reduce3);
+
+    }
+
+    private static void test16(List<Author> authors) {
+        Optional<Author> first = authors.stream()
+                .sorted()
+                .findFirst();
+        first.ifPresent(author -> System.out.println(author.getName()));
+    }
+
+    private static void test15(List<Author> authors) {
+        boolean flag01 = authors.stream()
+                .anyMatch(author -> author.getAge() > 18);
+        boolean flag02 = authors.stream()
+                .allMatch(author -> author.getAge() > 18);
+        boolean flag03 = authors.stream()
+                .noneMatch(author -> author.getAge() > 18);
+        System.out.println(flag01);
+        System.out.println(flag02);
+        System.out.println(flag03);
+    }
+
+    private static void test14(List<Author> authors) {
+        Map<String, List<Book>> collect = authors.stream()
+                .distinct()
+                .collect(Collectors.toMap(Author::getName, Author::getBookList));
+        System.out.println(collect);
+    }
+
+    private static void test13(List<Author> authors) {
+        List<String> collect = authors.stream()
+                .map(Author::getName)
+                .collect(Collectors.toList());
+        Set<Book> books = authors.stream()
+                .flatMap(author -> author.getBookList().stream())
+                .collect(Collectors.toSet());
+
+        System.out.println(collect);
+        System.out.println(books);
+    }
+
+    private static void test12(List<Author> authors) {
+        long count = authors.stream()
+                .flatMap(author -> author.getBookList().stream())
+                .distinct()
+                .count();
+        System.out.println(count);
     }
 
     private static void test11(List<Author> authors) {
@@ -32,7 +108,6 @@ public class StreamDemo {
                 .flatMap(book -> Arrays.stream(book.getCategory().split(",")))
                 .distinct()
                 .forEach(System.out::println);
-
 
 
     }
