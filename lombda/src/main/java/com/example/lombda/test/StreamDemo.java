@@ -5,6 +5,7 @@ import com.example.lombda.entity.Book;
 
 import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,7 +29,18 @@ public class StreamDemo {
 //        test14(authors);
 //        test15(authors);
 //        test16(authors);
-        test17(authors);
+//        test17(authors);
+        test18(authors);
+    }
+
+    private static void test18(List<Author> authors) {
+        Author author = authors.get(0);
+        Optional<Author> optionalAuthor = Optional.ofNullable(author);
+        optionalAuthor.ifPresentOrElse(author1 -> System.out.println(author1.getName()), test00());
+    }
+
+    private static Runnable test00() {
+        throw new RuntimeException();
     }
 
     private static void test17(List<Author> authors) {
